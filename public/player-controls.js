@@ -9,7 +9,7 @@ const progressDot = document.querySelector('#dot');
 
 // let progressBarLoop = setInterval(barMovement,200);
 
-// issue here is that typeof progressDot.style.left is a string, so how can I constantly append to it if it can'be be cast a number
+
 function barMovement(){
     // the percentage of the bar that the dot should move
     let fraction = player.getCurrentTime()/player.getDuration()*100;
