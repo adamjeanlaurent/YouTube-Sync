@@ -1,0 +1,26 @@
+#progress-bar{
+    margin-top: 5px;
+    background-color: black;
+    height: 10px;
+    width: 640px;
+    margin-left: 50px;
+}
+
+#buttons{
+    margin-top: 10px;
+    margin-left: 50px;
+}
+
+#player{
+    margin-top: 50px;
+    margin-left: 50px;
+}
+
+#dot{
+    background-color: white;
+    border: 1px solid black;
+    height: 20px;
+    width: 20px;
+    position: relative;
+    bottom: 6px;
+}
