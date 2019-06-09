@@ -17,9 +17,9 @@ function barMovement(){
     // moves the dot across the bar 
     progressDot.style.left = fraction.toString() + '%';
     // Stops dot from moving if the video is over
-    if(fraction === 100){
-        clearInterval(progressBarLoop);
-    }
+    // if(fraction === 100){
+    //     clearInterval(progressBarLoop);
+    // }
 }
 
 // ----SOCKET LISTENERS----
@@ -27,11 +27,13 @@ function barMovement(){
 // plays all connections
 socket.on('globalPlay', () => { 
     player.playVideo();
+    progressBarLoop = setInterval(barMovement,200);
 });
 
 // pauses all connections
 socket.on('globalPause', () => {
     player.pauseVideo();
+    clearInterval(progressBarLoop);
 });
 
 // ----EVENT LISTENERS----
@@ -48,8 +50,12 @@ pauseButton.addEventListener('click', () => {
 
 // progress bar
 progressBar.addEventListener('click', (event) => {
+    socket.emit('skip', event.clientX);
+});
+
+socket.on('globalSkip', (event) => {   
     // x where the bar was clicked
-    let clickScreenX = event.screenX;
+    let clickScreenX = event;
     // where the box currently is
     let currentBoxLeft = progressDot.offsetLeft;
 
@@ -69,12 +75,15 @@ progressBar.addEventListener('click', (event) => {
     let fraction = ((clickScreenX - 50)/640);
     console.log(fraction);
     player.seekTo(player.getDuration() * fraction);
-
 });
 
 
 /*
-    Make
+    TODO
+    dot is jumpy when skipping while paused
+    Make skipping and the progress bar loop work together
+    if skipping while paused keep it paused, same when playing
+    syncing using socket.io
 
 */
 

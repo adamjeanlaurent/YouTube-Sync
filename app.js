@@ -23,6 +23,9 @@ io.on('connection' , (socket) => {
     socket.on('pause', () => {
         io.emit('globalPause');
     });
+    socket.on('skip' , (event) => {
+        io.emit('globalSkip', event);
+    });
 });
 
 server.listen(3000, () => {
