@@ -1,3 +1,4 @@
+/* Progress Bar */
 #progress-bar{
     margin-top: 5px;
     background-color: black;
@@ -6,16 +7,19 @@
     margin-left: 50px;
 }
 
+/* Play & Pause Buttons */
 #buttons{
     margin-top: 10px;
     margin-left: 50px;
 }
 
+/*Youtube Player*/
 #player{
     margin-top: 50px;
     margin-left: 50px;
 }
 
+/*Progress Dot*/
 #dot{
     background-color: white;
     border: 1px solid black;
