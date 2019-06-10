@@ -26,6 +26,9 @@ io.on('connection' , (socket) => {
     socket.on('skip' , (event) => {
         io.emit('globalSkip', event);
     });
+    socket.on('disconnect', () => {
+        console.log('A user has disconnected');
+    });
 });
 
 server.listen(3000, () => {
