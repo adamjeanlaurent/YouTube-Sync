@@ -27,6 +27,7 @@ This is dissimilar to HTTP where the client requests some information from the s
 ## Gif Of Usage
 
 <img src = "yt.gif">
+Sample Video Creds: https://www.youtube.com/watch?v=WWggmC8kYZc
 
 ## Installation and Setup Instructions
 
