@@ -1,13 +1,30 @@
+// npm packages
 const express = require('express');
 const ejs = require('ejs');
 const http = require('http');
 const socketio = require('socket.io');
+const morgan = require('morgan');
+const cors = require('cors');
+const helmet = require('helmet');
+
+// routes
+const createRoomRoute = require('./routes/roomRoute');
+
 const app = express();
 
+// setup socket io
 const server = http.createServer(app);
 const io = socketio(server);
 
+// middleware
 app.use(express.static('public'));
+app.use(morgan('dev'));
+app.use(helmet());
+app.use(cors());
+
+app.use('/api/v1/createRoom', createRoomRoute);
+
+
 app.set("view engine", "ejs"); 
 
 // index page with embedded youtube player

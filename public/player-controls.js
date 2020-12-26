@@ -82,7 +82,7 @@ socket.on('globalSkip', (event) => {
     else if (currentBoxLeft > clickScreenX) {
         progressDot.style.left = clickScreenX - 50 + 'px';
     }
-    
+    ß
     // percentage of the bar to move the dot
     let fraction = ((clickScreenX - 50)/640);
     player.seekTo(player.getDuration() * fraction);
