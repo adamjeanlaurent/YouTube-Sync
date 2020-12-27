@@ -6,6 +6,10 @@ const Room = new mongoose.Schema({
         required: true,
         lowercase: true,
         unique: true
+    },
+    roomPassword: {
+        type: String, 
+        required: true
     }
 });
 

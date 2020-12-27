@@ -1,16 +1,45 @@
-let input = document.querySelector('input');
-let button = document.querySelector('button');
+const passwordInput = document.querySelector('input');
+const createRoomButton = document.querySelector('button');
 
-const getId = async() => {
+const createRoom = async() => {
     let options = {method: 'POST'};
-    let res = await fetch('http://localhost:3000/api/v1/createRoom', options);
+    
+    const url = `/api/v1/room/create/${passwordInput.value}`;
+
+    let res = await fetch(url, options);
     let json = await res.json();
     
     return json.id;
 }
 
-button.addEventListener('click', async() => {
-    let id = await getId();
-    input.value = id;
-    window.location= `/${id}`;
+const roomExists = async(id) => {
+    const url = `/api/v1/room/exists/${id}`;
+    
+    let res = await fetch(url);
+    let json = await res.json();
+
+    return json;
+};
+
+createRoomButton.addEventListener('click', async() => {
+    try {
+        let id = await createRoom();
+
+        // ensure room with this id exists
+        let doesRoomExist = await roomExists(id);
+        
+        if(doesRoomExist){
+            // send to room
+        }
+
+        else {
+            // send error message ? 
+        }
+        
+
+    }
+    catch {
+        // errors
+    }
+    
 });

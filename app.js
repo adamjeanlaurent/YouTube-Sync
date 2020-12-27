@@ -6,39 +6,64 @@ const socketio = require('socket.io');
 const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const slowDown = require('express-slow-down');
 
-// routes
-const createRoomRoute = require('./routes/roomRoute');
+// require routes
+const roomRoute = require('./routes/roomRoute');
+const indexRoute = require('./routes/indexRoute');
 
+// setup express
 const app = express();
 
 // setup socket io
 const server = http.createServer(app);
 const io = socketio(server);
 
+// trust proxy 
+app.enable("trust proxy");
+
+// setup ejs
+app.set("view engine", "ejs");
+
+// setup rate limiter
+const rateLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 mins
+    max: 100
+});
+
+// setup speed limiter
+const speedLimiter = slowDown({
+    windowMs: 5 * 60 * 1000, // 5 mins
+    delayAfter: 50,
+    delayMs: 500
+});
+
 // middleware
 app.use(express.static('public'));
 app.use(morgan('dev'));
 app.use(helmet());
 app.use(cors());
-app.use('/api/v1/createRoom', createRoomRoute);
+app.use(rateLimiter);
+app.use(speedLimiter);
 
-app.set("view engine", "ejs"); 
-
-// index page with embedded youtube player
-app.get('/', (req,res) => {
-    return res.render('index');
-});
-
+// error handler
 app.use((error, req, res, next) => {
     res.status(500);
     if(process.env.NODE_ENV == 'production') {
-        return res.send({
+        return res.json({
             error: 'Error Occured 🥞'
         });
     }
-    return error.stack;
+
+    return res.json({
+        error: error.stack
+    });
 });
+
+// routes
+app.use('/api/v1/room', roomRoute);
+app.use('/', indexRoute);
 
 // connection event
 io.on('connection' , (socket) => {
