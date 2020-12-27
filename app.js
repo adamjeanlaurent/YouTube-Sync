@@ -24,7 +24,6 @@ app.use(cors());
 
 app.use('/api/v1/createRoom', createRoomRoute);
 
-
 app.set("view engine", "ejs"); 
 
 // index page with embedded youtube player
