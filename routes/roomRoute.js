@@ -5,6 +5,36 @@ const RoomModel = require('../models/room');
 
 const router = express.Router();
 
+const compareRoomPassword = async(passwordPlainText, roomID) => {
+    try {
+        const room = await RoomModel.findOne({roomID : roomID});
+
+        if(room == null) {
+            return false;
+        }
+
+        else {
+            const hashedPasswordFromDB = room.roomPassword;
+            const hashedInputPassword = md5(passwordPlainText);
+
+            if(hashedInputPassword == hashedPasswordFromDB) {
+                return true;
+            }
+
+            return false;
+        }
+    }
+
+    catch {
+
+    }
+};
+
+
+router.get('/auth/:password', async (req, res, next) => {
+
+});
+
 router.post('/create/:password', async (req, res, next) => {
     const { password } = req.params;
     const id = nanoid(10).toLowerCase();
@@ -28,22 +58,6 @@ router.post('/create/:password', async (req, res, next) => {
     });
 });
 
-router.get('/exists/:roomID', async (req, res, next) => {
-    const { roomID } = req.params;
 
-    try {
-        const room = await RoomModel.findOne({roomID : roomID});
-
-        if(room == null) {
-            return res.json({exists: false})
-        }
-
-        return res.json({exists: true});
-    }
-
-    catch(e) {
-        return next(e);
-    }
-});
 
 module.exports = router;

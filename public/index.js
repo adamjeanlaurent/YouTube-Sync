@@ -12,34 +12,14 @@ const createRoom = async() => {
     return json.id;
 }
 
-const roomExists = async(id) => {
-    const url = `/api/v1/room/exists/${id}`;
-    
-    let res = await fetch(url);
-    let json = await res.json();
-
-    return json;
-};
-
 createRoomButton.addEventListener('click', async() => {
     try {
         let id = await createRoom();
-
-        // ensure room with this id exists
-        let doesRoomExist = await roomExists(id);
-        
-        if(doesRoomExist){
-            // send to room
-        }
-
-        else {
-            // send error message ? 
-        }
-        
-
+        window.location = `/room/join/${id}`;
     }
+
     catch {
-        // errors
+
     }
     
 });

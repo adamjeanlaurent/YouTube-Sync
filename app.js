@@ -9,10 +9,6 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const slowDown = require('express-slow-down');
 
-// require routes
-const roomRoute = require('./routes/roomRoute');
-const indexRoute = require('./routes/indexRoute');
-
 // setup express
 const app = express();
 
@@ -62,8 +58,9 @@ app.use((error, req, res, next) => {
 });
 
 // routes
-app.use('/api/v1/room', roomRoute);
-app.use('/', indexRoute);
+app.use('/api/v1/room', require('./routes/roomRoute'));
+app.use('/room/', require('./routes/joinRoute'));
+app.use('/', require('./routes/indexRoute'));
 
 // connection event
 io.on('connection' , (socket) => {
