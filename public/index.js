@@ -12,4 +12,5 @@ const getId = async() => {
 button.addEventListener('click', async() => {
     let id = await getId();
     input.value = id;
+    window.location= `/${id}`;
 });

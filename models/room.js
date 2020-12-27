@@ -1,7 +1,12 @@
 const mongoose = require('./db');
 
 const Room = new mongoose.Schema({
-    roomID: String
+    roomID: {
+        type: String,
+        required: true,
+        lowercase: true,
+        unique: true
+    }
 });
 
 const RoomModel = mongoose.model('Room', Room);

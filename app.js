@@ -21,14 +21,23 @@ app.use(express.static('public'));
 app.use(morgan('dev'));
 app.use(helmet());
 app.use(cors());
-
 app.use('/api/v1/createRoom', createRoomRoute);
 
 app.set("view engine", "ejs"); 
 
 // index page with embedded youtube player
 app.get('/', (req,res) => {
-    res.render('index');
+    return res.render('index');
+});
+
+app.use((error, req, res, next) => {
+    res.status(500);
+    if(process.env.NODE_ENV == 'production') {
+        return res.send({
+            error: 'Error Occured 🥞'
+        });
+    }
+    return error.stack;
 });
 
 // connection event
