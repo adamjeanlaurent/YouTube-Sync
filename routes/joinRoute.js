@@ -35,7 +35,6 @@ router.get('/join/:roomID', async (req, res, next) => {
     const { roomID } = req.params;
 
     const renderParams = await roomExists(roomID);
-    console.log(renderParams);
 
     return res.render('join', renderParams);
 });

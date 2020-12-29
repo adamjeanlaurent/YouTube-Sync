@@ -8,6 +8,11 @@ const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const slowDown = require('express-slow-down');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+
+// custom modules
+const authenticateToken = require('./middleware/authenticateToken');
 
 // setup express
 const app = express();
@@ -42,6 +47,7 @@ app.use(helmet());
 app.use(cors());
 app.use(rateLimiter);
 app.use(speedLimiter);
+app.use(express.json());
 
 // error handler
 app.use((error, req, res, next) => {
@@ -51,41 +57,42 @@ app.use((error, req, res, next) => {
             error: 'Error Occured 🥞'
         });
     }
-
+    
     return res.json({
         error: error.stack
     });
 });
+
 
 // routes
 app.use('/api/v1/room', require('./routes/roomRoute'));
 app.use('/room/', require('./routes/joinRoute'));
 app.use('/', require('./routes/indexRoute'));
 
-// connection event
-io.on('connection' , (socket) => {
-    console.log('new connection');
+// // connection event
+// io.on('connection' , (socket) => {
+//     console.log('new connection');
     
-    // play request
-    socket.on('play' , () => {
-        io.emit('globalPlay');
-    });
+//     // play request
+//     socket.on('play' , () => {
+//         io.emit('globalPlay');
+//     });
     
-    // pause request
-    socket.on('pause', () => {
-        io.emit('globalPause');
-    });
+//     // pause request
+//     socket.on('pause', () => {
+//         io.emit('globalPause');
+//     });
     
-    // skip request
-    socket.on('skip' , (event) => {
-        io.emit('globalSkip', event);
-    });
+//     // skip request
+//     socket.on('skip' , (event) => {
+//         io.emit('globalSkip', event);
+//     });
     
-    // disconnection event
-    socket.on('disconnect', () => {
-        console.log('A user has disconnected');
-    });
-});
+//     // disconnection event
+//     socket.on('disconnect', () => {
+//         console.log('A user has disconnected');
+//     });
+// });
 
 // port where server resides
 server.listen(process.env.PORT || 3000, () => {

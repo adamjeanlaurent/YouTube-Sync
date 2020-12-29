@@ -2,37 +2,50 @@ const express = require('express');
 const { nanoid } = require('nanoid');
 const md5 = require('md5');
 const RoomModel = require('../models/room');
+require('dotenv').config();
 
 const router = express.Router();
 
 const compareRoomPassword = async(passwordPlainText, roomID) => {
-    try {
-        const room = await RoomModel.findOne({roomID : roomID});
+    const room = await RoomModel.findOne({roomID: roomID});
 
-        if(room == null) {
-            return false;
-        }
-
-        else {
-            const hashedPasswordFromDB = room.roomPassword;
-            const hashedInputPassword = md5(passwordPlainText);
-
-            if(hashedInputPassword == hashedPasswordFromDB) {
-                return true;
-            }
-
-            return false;
-        }
+    if(room == null) {
+        return null;
     }
 
-    catch {
+    else {
+        const hashedPasswordFromDB = room.roomPassword;
+        const hashedInputPassword = md5(passwordPlainText);
 
+        if(hashedInputPassword == hashedPasswordFromDB) {
+            return room;
+        }
+
+        return null;
     }
 };
 
+router.get('/auth/:password/:roomID', async (req, res, next) => {
+    const { password, roomID } = req.params;
 
-router.get('/auth/:password', async (req, res, next) => {
+    if(password.length == 0 || roomID.length == 0) {
+        return res.json({error: 'required, non-empty roomID and password.'});
+    }
 
+    try {
+        const roomInfo = compareRoomPassword(password, roomID);
+        
+        if(roomInfo === null) {
+            return res.json({error: 'invalid password.'});
+        }
+
+        const accessToken = jwt.sign({roomID: roomInfo.roomID}, process.env.ACCESS_TOKEN_SECRET);
+        return res.json({accessToken: accessToken});
+    }
+
+    catch(e) {
+        return next(e);
+    }
 });
 
 router.post('/create/:password', async (req, res, next) => {
@@ -57,7 +70,5 @@ router.post('/create/:password', async (req, res, next) => {
         id: id 
     });
 });
-
-
 
 module.exports = router;
