@@ -14,7 +14,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "ejs": "^2.6.1",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-rate-limit": "^5.2.3",
     "express-slow-down": "^1.4.0",
     "helmet": "^4.2.0",
